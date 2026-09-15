@@ -18,3 +18,17 @@ n 83
 a 14
 b 22
 key 29
+
+# test case 4
+g 13
+n 41
+a 19
+b 29
+key 6
+
+# test case 5
+g 5
+n 10000001707
+a 13
+b 97
+key 9302858050
