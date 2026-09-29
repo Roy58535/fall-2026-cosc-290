@@ -1,0 +1,23 @@
+c String reverse
+accept 8 9 
+
+c Skip the hash symbol
+0 # # R 1
+
+c Do something
+1 1 1 R 2
+1 0 0 R 5
+
+2 N N R 2
+2 1 1 R 3
+2 0 0 R 4
+
+5 N N R 5
+5 0 0 R 4
+5 1 1 R 4
+
+3 = = R 6
+4 = = R 7
+
+6 λ 0 R 8
+7 λ 1 R 9

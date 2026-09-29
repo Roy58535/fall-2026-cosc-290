@@ -1,0 +1,32 @@
+c String reverse
+accept 6
+
+c Skip the hash symbol
+0 # # R 1
+
+c Do something
+1 0 0 R 1
+1 1 1 R 1
+1 B B L 2
+
+2 X X L 2
+2 0 X R 3
+2 1 X R 4
+
+3 X X R 3
+3 B B R 3
+3 0 0 R 3
+3 1 1 R 3
+3 λ 0 L 5
+
+4 X X R 4
+4 B B R 4
+4 0 0 R 4
+4 1 1 R 4
+4 λ 1 L 5
+
+5 0 0 L 5
+5 1 1 L 5
+5 B B L 2
+
+2 # # R 6
