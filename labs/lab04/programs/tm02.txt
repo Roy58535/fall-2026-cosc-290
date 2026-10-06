@@ -2,7 +2,7 @@ c String reverse
 accept 6
 
 c Skip the hash symbol
-0 # # R 1
+0 $ $ R 1
 
 c Do something
 1 0 0 R 1
@@ -29,4 +29,4 @@ c Do something
 5 1 1 L 5
 5 B B L 2
 
-2 # # R 6
+2 $ $ R 6

@@ -1,23 +1,57 @@
-c String reverse
-accept 8 9 
+c TM Modulo
+accept 9
 
-c Skip the hash symbol
-0 # # R 1
+c Skip the dollar symbol
+0 $ $ R 1
 
-c Do something
-1 1 1 R 2
-1 0 0 R 5
+c find m
+1 a a R 1
+1 X X R 1
+1 Y Y R 1
+1 % % R 1
+1 = = L 2
+1 m Y L 3
 
-2 N N R 2
-2 1 1 R 3
-2 0 0 R 4
+c restore all m
+2 Y m L 2
+2 % % R 1
 
-5 N N R 5
-5 0 0 R 4
-5 1 1 R 4
+c find a or $
+3 X X L 3
+3 Y Y L 3
+3 % % L 3
+3 a X R 1
+3 $ $ R 4
 
-3 = = R 6
+c find Y
+4 Z Z R 4
+4 a a R 4
+4 X X R 4
+4 % % R 4
+4 Y Z R 5
+4 m m R 7
 4 = = R 7
 
-6 λ 0 R 8
-7 λ 1 R 9
+c find empty and put r for each Y
+5 r r R 5
+5 = = R 5
+5 m m R 5
+5 Y Y R 5
+5 λ r L 6
+
+c loop back for next Y
+6 Z Z L 6
+6 Y Y L 6
+6 r r L 6
+6 = = L 6
+6 m m L 6
+6 % % R 4
+
+c break loop and move right
+7 m m R 7
+7 = = R 7
+7 r r R 7
+7 λ λ L 8
+
+c remove last r
+8 r λ L 9
