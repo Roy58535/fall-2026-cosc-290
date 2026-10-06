@@ -28,16 +28,40 @@ MESSAGE_SIZE = len(DATA_POSITIONS)
 
 def syndrome(block):
     """ XOR together the positions of all the 1 bits.  0 means no error. """
-    pass
+    p = 0
+    for i in range(BLOCK_SIZE):
+        if block[i] == 1:
+            p = p ^ i
+    return p
 
 def overall_parity(block):
     """ XOR of every bit in the block: 0 if there is an even number of 1s. """
-    pass
+    p = 0
+    for b in block:
+        p = p ^ b
+
+    return p
 
 def encode(message):
     """ Build a 16-bit block from an 11-bit message. """
     block = [0] * BLOCK_SIZE
-    pass
+    j = 0
+    for i in range(BLOCK_SIZE):
+        if i > 0 and i not in PARITY_POSITIONS:
+            block[i] = message[j]
+            j += 1
+    
+    num = 0
+    for i in range(BLOCK_SIZE):
+        if block[i] == 1:
+            num = num ^ i
+
+    for p in PARITY_POSITIONS:
+        if num & p == p:
+            block[p] = 1
+
+    block[0] = overall_parity(block)
+    return block
 
 def decode(block):
     """
@@ -45,7 +69,18 @@ def decode(block):
     position of the flipped bit or None).
     """
     block = list(block)   # work on a copy
-    pass
+    
+    syn = syndrome(block) 
+    syn = None if syn == 0 else syn
+    if syn:
+        block[syn] = 1 if block[syn] == 0 else 0
+
+    msg = []
+    for i in range(BLOCK_SIZE):
+        if i > 0 and i not in PARITY_POSITIONS:
+            msg.append(block[i])
+    
+    return (block, msg, syn)
 
 # ---------------------------------------------------------------------------
 # Command-line interface (no need to edit below this line)
