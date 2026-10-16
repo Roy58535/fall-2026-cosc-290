@@ -46,8 +46,8 @@ def encode(message):
     """ Build a 16-bit block from an 11-bit message. """
     block = [0] * BLOCK_SIZE
     j = 0
-    for i in range(BLOCK_SIZE):
-        if i > 0 and i not in PARITY_POSITIONS:
+    for i in range(1, BLOCK_SIZE):
+        if i not in PARITY_POSITIONS:
             block[i] = message[j]
             j += 1
     
@@ -70,10 +70,17 @@ def decode(block):
     """
     block = list(block)   # work on a copy
     
-    syn = syndrome(block) 
-    syn = None if syn == 0 else syn
-    if syn:
-        block[syn] = 1 if block[syn] == 0 else 0
+    syn = syndrome(block)
+    if syn == 0:
+        if overall_parity(block) == 1:
+            block[0] = 1 if block[0] == 0 else 0
+        else:
+            syn = None
+    else:
+        if overall_parity(block) == 1:
+            block[syn] = 1 if block[syn] == 0 else 0
+        else:
+            raise ValueError("Two bit flips detected. Unable to Correct.")
 
     msg = []
     for i in range(BLOCK_SIZE):
