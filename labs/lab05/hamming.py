@@ -83,8 +83,8 @@ def decode(block):
             raise ValueError("Two bit flips detected. Unable to Correct.")
 
     msg = []
-    for i in range(BLOCK_SIZE):
-        if i > 0 and i not in PARITY_POSITIONS:
+    for i in range(1, BLOCK_SIZE):
+        if i not in PARITY_POSITIONS:
             msg.append(block[i])
     
     return (block, msg, syn)
