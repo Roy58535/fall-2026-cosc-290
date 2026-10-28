@@ -99,7 +99,13 @@ def encode(message):
     The codeword for a message: the message followed by PARITY parity symbols,
     chosen so that the whole codeword is divisible by g(x).
     """
-    pass   
+    message = message + [0] * PARITY
+    g = generator()
+    r = poly_remainder(message, g)
+    t = message
+    for i in range(len(r)):
+        t[len(t) - len(r) + i] = (t[len(t) - len(r) + i] - r[i]) % P
+    return t
 
 
 # ---------------------------------------------------------------------------
@@ -108,7 +114,11 @@ def encode(message):
 
 def syndromes(received):
     """ [S1, S2] where S_j is the received polynomial evaluated at a^j. """
-    pass   
+    s = []
+    for j in range(1, PARITY + 1):
+        root = pow(ALPHA, j, P)
+        s.append(poly_eval(received, root))
+    return s
 
 
 def locate_error(S, n):
@@ -121,12 +131,18 @@ def locate_error(S, n):
     (Equivalently, i is the root of the error locator L(x) = 1 - X x at
     x = a^(-i).)  Returns None when no position fits: more than one error.
     """
-    pass   
+    X = S[1] * inverse(S[0])
+    for i in range(n):
+        if poly_eval([-X, 1], pow(ALPHA, -i, P)) == 0:
+            return i
+    return None
 
 
 def error_value(S, position):
     """ The error value M at the given position: M = S1 / a^position. """
-    pass   
+    for m in range(P):
+        if (m * pow(ALPHA, position, P)) % P == S[0]:
+            return m
 
 
 def decode(received):
@@ -135,7 +151,21 @@ def decode(received):
     value), with position and value None when there was no error, or
     returns None when there is more than one error.
     """
-    pass   
+    S = syndromes(received)
+    pos = None
+    M = None
+    for i in range(len(S)):
+        if S[i] != 0:
+            pos = locate_error(S, len(received))
+            if pos is None:
+                return None
+            M = error_value(S, pos)
+            break
+    corrected = received.copy()
+    if pos is not None:
+        corrected[len(received) - 1 - pos] = (corrected[len(received) - 1 - pos] - M) % P
+    message = corrected[0:len(corrected) - PARITY]
+    return (corrected, message, pos, M)
 
 
 # ---------------------------------------------------------------------------
