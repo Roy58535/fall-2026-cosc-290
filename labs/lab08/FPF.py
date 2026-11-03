@@ -8,7 +8,7 @@ def fpf(n):
         return 1
     return (n - 1) * (fpf(n - 1) + fpf(n - 2))
 
-n = 30
+n = 40
 start = perf_counter()
 result = fpf(n)
 elapsed = perf_counter() - start
